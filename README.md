@@ -1,6 +1,6 @@
 # Semester Studio
 
-A personal study planner for Amalia Vasilikou's ETH Zürich Autumn Semester 2026. It starts with the 14 registered course units (54 ECTS, including the 11 ECTS structural engineering project) and dates verified from the supplied course schedules.
+A personal study planner for Amalia Vasilikou's ETH Zürich Autumn Semester 2026. It has 11 active course units (44 ECTS, including the 11 ECTS structural engineering project) and three deregistered courses kept off the active plan. Dates were verified from the supplied course schedules.
 
 ## What you can do
 
@@ -14,7 +14,7 @@ A personal study planner for Amalia Vasilikou's ETH Zürich Autumn Semester 2026
 
 ## Dates and accuracy
 
-The app preloads dates explicitly given in the 2026 PDFs, including Scientific ML, Seismic Design II, BIM, NDE, Underground Construction and Structural Reliability. The 2025 Material Mechanics CSI slides do **not** provide 2026 deadlines. Other courses without published exam dates show “to confirm.” Assignment numbers next to lecture dates in GETPD and HW tutorials in DCGE are **not** assumed to be submission deadlines.
+The app preloads dates explicitly given in the 2026 PDFs, including Scientific ML, Seismic Design II, BIM, NDE, Underground Construction and Structural Reliability. Scientific ML, Material Mechanics CSI and Fibre Composites were deregistered on 27 September 2026. They remain in the course records, while their classes, tasks and exams are excluded from the dashboard, active calendar, reminders and calendar export. An existing browser plan or version 1 backup is updated once without removing custom tasks. The 2025 Material Mechanics CSI slides do **not** provide 2026 deadlines. Other courses without published exam dates show “to confirm.” Assignment numbers next to lecture dates in GETPD and HW tutorials in DCGE are **not** assumed to be submission deadlines.
 
 The standard timetable comes from the registration screenshot and the schedules; special sessions, holidays and individual presentation slots can differ. Check ETH Moodle and your email for updates. The calendar uses Europe/Zurich date labels and exports timezone-aware timed entries.
 

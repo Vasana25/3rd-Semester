@@ -1,4 +1,4 @@
-import {addDays, classEnd, classStart, dateWeekday, type PlannerState, validState} from "./planner-data";
+import {addDays, classEnd, classStart, dateWeekday, migrateState, type PlannerState, type SavedPlannerState, validState} from "./planner-data";
 
 function download(name:string, content:string, type:string){ const blob=new Blob([content],{type});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
 export function downloadBackup(state:PlannerState){download(`semester-studio-${new Date().toISOString().slice(0,10)}.json`,JSON.stringify(state,null,2),"application/json");}
@@ -44,9 +44,10 @@ export async function pushToGithub(repo:string,token:string,state:PlannerState,l
   if(!response.ok)throw new Error(`Save failed (${response.status}). Your local plan is safe; load the GitHub copy if it changed.`);
   const result=await response.json() as {content?:{sha?:string}};if(!result.content?.sha)throw new Error("GitHub did not confirm the saved file.");return result.content.sha;
 }
-export async function pullFromGithub(repo:string,token:string){const info=await requestInfo(repo,token);if(!info)throw new Error("No planner file exists in this repository yet. Save to GitHub first.");if(info.type!=="file"||info.encoding!=="base64")throw new Error("The GitHub file is not a readable planner backup.");const value=JSON.parse(decode(info.content));if(!validState(value))throw new Error("The GitHub file is not a compatible planner backup.");return {state:value as PlannerState,sha:info.sha};}
-export function mergeState(local:PlannerState,remote:PlannerState):PlannerState {
+export async function pullFromGithub(repo:string,token:string){const info=await requestInfo(repo,token);if(!info)throw new Error("No planner file exists in this repository yet. Save to GitHub first.");if(info.type!=="file"||info.encoding!=="base64")throw new Error("The GitHub file is not a readable planner backup.");const value=JSON.parse(decode(info.content));if(!validState(value))throw new Error("The GitHub file is not a compatible planner backup.");return {state:migrateState(value),sha:info.sha};}
+export function mergeState(local:PlannerState,backup:SavedPlannerState):PlannerState {
+  const remote=migrateState(backup);
   const c=new Map(local.courses.map(x=>[x.id,x]));for(const x of remote.courses)c.set(x.id,{...c.get(x.id),...x});
   const i=new Map(local.items.map(x=>[x.id,x]));for(const x of remote.items){const prev=i.get(x.id);if(!prev||(!prev.updatedAt||x.updatedAt>=prev.updatedAt))i.set(x.id,x);}
-  return {version:1,courses:[...c.values()],items:[...i.values()],focusMinutes:Math.max(local.focusMinutes||0,remote.focusMinutes||0),updatedAt:new Date().toISOString()};
+  return {version:2,courses:[...c.values()],items:[...i.values()],focusMinutes:Math.max(local.focusMinutes||0,remote.focusMinutes||0),updatedAt:new Date().toISOString()};
 }
